@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package fi.simoroikonen.lunchvote.components.occasion.view;
+
+import "components/occasion/domain/occasion_domain.proto";
+import "kalix/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+
+message OccasionsByIdResponse {
+  repeated domain.OccasionState occasions = 1;
+}
+
+message ById {
+  string organization = 1;
+  string id = 2;
+}
+
+service OccasionsById {
+  option (kalix.codegen) = {
+    view: {}
+  };
+
+  rpc ProcessOccasionPublished(domain.OccasionPublished) returns (domain.OccasionState) {
+    option (kalix.method).eventing.in = {
+      event_sourced_entity: "occasion"
+    };
+    option (kalix.method).view.update = {
+      table: "occasion_states"
+      transform_updates: true
+    };
+  }
+
+  rpc IgnoreOtherEvents(google.protobuf.Any) returns (domain.OccasionState) {
+    option (kalix.method).eventing.in = {
+      event_sourced_entity: "occasion"
+      ignore: true
+    };
+  };
+
+  rpc GetOccasions(ById) returns (OccasionsByIdResponse) {
+    option (kalix.method).view.query = {
+      query: "SELECT * AS occasions FROM occasion_states WHERE id = :id AND organization = :organization"
+    };
+  }
+}

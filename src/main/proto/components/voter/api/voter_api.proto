@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "kalix/annotations.proto";
+import "google/api/annotations.proto";
+
+package fi.simoroikonen.lunchvote.components.voter.api;
+
+message IntroduceVoterCommand {
+  string organization = 1 [(kalix.field).entity_key = true];
+  string username = 2 [(kalix.field).entity_key = true];
+  repeated string area_ids = 3;
+}
+
+message ArchiveVoterCommand {
+  string organization = 1 [(kalix.field).entity_key = true];
+  string username = 2 [(kalix.field).entity_key = true];
+}
+
+service VoterService {
+  option (kalix.codegen) = {
+    event_sourced_entity: {
+      name: "fi.simoroikonen.lunchvote.components.voter.domain.Voter"
+      entity_type: "voter"
+      state: "fi.simoroikonen.lunchvote.components.voter.domain.VoterState"
+      events: [
+        "fi.simoroikonen.lunchvote.components.voter.domain.VoterIntroduced",
+        "fi.simoroikonen.lunchvote.components.voter.domain.VoterArchived"]
+    }
+  };
+
+  rpc IntroduceVoter(IntroduceVoterCommand) returns (google.protobuf.Empty) {}
+  rpc ArchiveVoter(ArchiveVoterCommand) returns (google.protobuf.Empty) {}
+
+}

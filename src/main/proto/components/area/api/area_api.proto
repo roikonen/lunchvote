@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "kalix/annotations.proto";
+import "google/api/annotations.proto";
+
+package fi.simoroikonen.lunchvote.components.area.api;
+
+// VIEWS
+
+message GetAreas {
+  string organization = 1;
+}
+
+message Area {
+  string id = 1;
+}
+
+message GetAreasResponse {
+  repeated api.Area areas = 1;
+}
+
+// COMMANDS
+
+message IntroduceAreaCommand {
+  string organization = 1 [(kalix.field).entity_key = true];
+  string id = 2 [(kalix.field).entity_key = true];
+}
+
+message IntroducePlaceCommand {
+  string organization = 1 [(kalix.field).entity_key = true];
+  string area_id = 2 [(kalix.field).entity_key = true];
+  string place_id = 3;
+}
+
+message ArchivePlaceCommand {
+  string organization = 1 [(kalix.field).entity_key = true];
+  string area_id = 2 [(kalix.field).entity_key = true];
+  string place_id = 3;
+}
+
+service AreaService {
+  option (kalix.codegen) = {
+    event_sourced_entity: {
+      name: "fi.simoroikonen.lunchvote.components.area.domain.Area"
+      entity_type: "area"
+      state: "fi.simoroikonen.lunchvote.components.area.domain.AreaState"
+      events: [
+        "fi.simoroikonen.lunchvote.components.area.domain.AreaIntroduced",
+        "fi.simoroikonen.lunchvote.components.area.domain.PlaceIntroduced",
+        "fi.simoroikonen.lunchvote.components.area.domain.PlaceArchived"]
+    }
+  };
+
+  rpc IntroduceArea(IntroduceAreaCommand) returns (google.protobuf.Empty) {}
+  rpc IntroducePlace(IntroducePlaceCommand) returns (google.protobuf.Empty) {}
+  rpc ArchivePlace(ArchivePlaceCommand) returns (google.protobuf.Empty) {}
+
+}

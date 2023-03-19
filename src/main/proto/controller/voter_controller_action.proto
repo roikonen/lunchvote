@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+package fi.simoroikonen.lunchvote.controller;
+
+import "google/protobuf/empty.proto";
+import "kalix/annotations.proto";
+import "components/occasion/api/occasion_api.proto";
+import "components/occasion/view/occasions_by_areas_view.proto";
+import "entity_id.proto";
+
+// COMMANDS
+
+message IntroducePlaceCommand {
+  string area_id = 1;
+  string place_id = 2;
+}
+
+message ArchivePlaceCommand {
+  string area_id = 1;
+  string place_id = 2;
+}
+
+// QUERIES
+
+message OccasionsQuery {
+  string start_after_iso_8610_utc = 1;
+  string start_before_iso_8610_utc = 2;
+}
+
+message ByAreaRequest {
+  string area_id = 1;
+}
+
+message GetPlaceIdsResponse {
+  repeated string place_ids = 1;
+}
+
+// SERVICE
+
+service VoterControllerAction {
+  option (kalix.codegen) = {
+    action: {}
+  };
+  option (kalix.service).acl.allow = { principal: ALL };
+
+  // PLACE
+
+  rpc IntroducePlace(IntroducePlaceCommand) returns (google.protobuf.Empty) {
+    option (kalix.method).jwt = {
+      validate: BEARER_TOKEN
+    };
+  }
+
+  rpc ArchivePlace(ArchivePlaceCommand) returns (google.protobuf.Empty) {
+    option (kalix.method).jwt = {
+      validate: BEARER_TOKEN
+    };
+  }
+
+  rpc GetPlaceIds(ByAreaRequest) returns (GetPlaceIdsResponse) {
+    option (kalix.method).jwt = {
+      validate: BEARER_TOKEN
+    };
+  }
+
+  // OCCASION
+
+  rpc PublishOccasion(components.occasion.api.PublishOccasionCommand) returns (EntityId) {
+    option (kalix.method).jwt = {
+      validate: BEARER_TOKEN
+    };
+  }
+
+  rpc VotePlaceForOccasion(components.occasion.api.VotePlaceForOccasionCommand) returns (google.protobuf.Empty) {
+    option (kalix.method).jwt = {
+      validate: BEARER_TOKEN
+    };
+  }
+
+  rpc GetOccasions(OccasionsQuery) returns (components.occasion.view.OccasionsByAreasResponse) {
+    option (kalix.method).jwt = {
+      validate: BEARER_TOKEN
+    };
+  }
+}
+

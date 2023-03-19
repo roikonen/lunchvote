@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package fi.simoroikonen.lunchvote.components.area.domain;
+
+message AreaState {
+  string organization = 1;
+  string id = 2;
+  repeated Place places = 3;
+}
+
+message Place {
+  string id = 1;
+  string introducer_username = 2;
+}
+
+// EVENTS
+
+message AreaIntroduced {
+  string organization = 1;
+  string id = 2;
+}
+
+message PlaceIntroduced {
+  string id = 1;
+  string introducer_username = 2;
+}
+
+message PlaceArchived {
+  string id = 1;
+}

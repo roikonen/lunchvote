@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package fi.simoroikonen.lunchvote.components.area.view;
+
+import "components/area/domain/area_domain.proto";
+import "components/area/api/area_api.proto";
+import "kalix/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+
+message AreasByIdResponse {
+  repeated domain.AreaState areas = 1;
+}
+
+message ById {
+  string organization = 1;
+  string id = 2;
+}
+
+service AreasById {
+  option (kalix.codegen) = {
+    view: {}
+  };
+
+  rpc ProcessAreaIntroduced(domain.AreaIntroduced) returns (domain.AreaState) {
+    option (kalix.method).eventing.in = {
+      event_sourced_entity: "area"
+    };
+    option (kalix.method).view.update = {
+      table: "area_states"
+      transform_updates: true
+    };
+  }
+
+  rpc ProcessPlaceIntroduced(domain.PlaceIntroduced) returns (domain.AreaState) {
+    option (kalix.method).eventing.in = {
+      event_sourced_entity: "area"
+    };
+    option (kalix.method).view.update = {
+      table: "area_states"
+      transform_updates: true
+    };
+  }
+
+  rpc ProcessPlaceArchived(domain.PlaceArchived) returns (domain.AreaState) {
+    option (kalix.method).eventing.in = {
+      event_sourced_entity: "area"
+    };
+    option (kalix.method).view.update = {
+      table: "area_states"
+      transform_updates: true
+    };
+  }
+
+  rpc GetAreas(ById) returns (AreasByIdResponse) {
+    option (kalix.method).view.query = {
+      query: "SELECT * AS areas FROM area_states WHERE id = :id AND organization = :organization"
+    };
+  }
+}

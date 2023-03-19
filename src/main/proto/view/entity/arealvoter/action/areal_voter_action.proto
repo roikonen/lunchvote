@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+import "kalix/annotations.proto";
+import "google/protobuf/empty.proto";
+import "components/voter/domain/voter_domain.proto";
+
+package fi.simoroikonen.lunchvote.view.entity.arealvoter.action;
+
+service ArealVoterAction {
+  option (kalix.codegen) = {
+    action: {}
+  };
+
+  option (kalix.service).eventing.in = {
+    event_sourced_entity: "voter"
+    // skip/filter events that there is no transform method for (TopicIntroduced)
+    ignore_unknown: true
+  };
+
+  rpc ProcessVoterIntroduced(components.voter.domain.VoterIntroduced) returns (google.protobuf.Empty) { }
+  rpc ProcessVoterArchived(components.voter.domain.VoterArchived) returns (google.protobuf.Empty) { }
+}

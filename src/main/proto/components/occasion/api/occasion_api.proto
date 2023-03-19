@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "kalix/annotations.proto";
+import "google/api/annotations.proto";
+import "entity_id.proto";
+
+package fi.simoroikonen.lunchvote.components.occasion.api;
+
+// VIEWS
+
+message Occasion {
+  string id = 1;
+  string area_id = 2;
+  string start_datetime_iso_8610_utc = 3;
+  string publisher_username = 4;
+  repeated Place voted_places = 5;
+}
+
+message Place {
+  string place_id = 1;
+  int32 votes = 2;
+}
+
+// COMMANDS
+
+message PublishOccasionCommand {
+  string area_id = 1;
+  string start_datetime_iso_8610_utc = 2;
+}
+
+message VotePlaceForOccasionCommand {
+  string occasion_id = 1 [(kalix.field).entity_key = true];
+  string place_id = 3;
+}
+
+service OccasionService {
+  option (kalix.codegen) = {
+    event_sourced_entity: {
+      name: "fi.simoroikonen.lunchvote.components.occasion.domain.Occasion"
+      entity_type: "occasion"
+      state: "fi.simoroikonen.lunchvote.components.occasion.domain.OccasionState"
+      events: [
+        "fi.simoroikonen.lunchvote.components.occasion.domain.OccasionPublished",
+        "fi.simoroikonen.lunchvote.components.occasion.domain.VotePlacedForOccasion"]
+    }
+  };
+
+  rpc Publish(PublishOccasionCommand) returns (EntityId) {
+    option (kalix.method).entity.key_generator = VERSION_4_UUID;
+  };
+
+  rpc VotePlace(VotePlaceForOccasionCommand) returns (google.protobuf.Empty) {}
+
+}

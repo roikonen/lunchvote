@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package fi.simoroikonen.lunchvote.components.voter.view;
+
+import "components/voter/domain/voter_domain.proto";
+import "kalix/annotations.proto";
+import "google/protobuf/any.proto";
+
+message ByUsernameRequest {
+  string organization = 1;
+  string username = 2;
+}
+
+message VotersResponse {
+  repeated domain.VoterState voters = 1;
+}
+
+service VoterByUsername {
+  option (kalix.codegen) = {
+    view: {}
+  };
+
+  rpc ProcessVoterIntroduced(domain.VoterIntroduced) returns (domain.VoterState) {
+    option (kalix.method).eventing.in = {
+      event_sourced_entity: "voter"
+    };
+    option (kalix.method).view.update = {
+      table: "voters"
+      transform_updates: true
+    };
+  }
+
+  rpc ProcessVoterArchived(domain.VoterArchived) returns (domain.VoterState) {
+    option (kalix.method).eventing.in = {
+      event_sourced_entity: "voter"
+    };
+    option (kalix.method).view.update = {
+      table: "voters"
+      transform_updates: true
+    };
+  }
+
+  rpc GetVoters(ByUsernameRequest) returns (VotersResponse) {
+    option (kalix.method).view.query = {
+      query: "SELECT * AS voters FROM voters "
+             "WHERE username = :username AND archived = false AND organization = :organization"
+    };
+  }
+}

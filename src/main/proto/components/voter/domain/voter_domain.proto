@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package fi.simoroikonen.lunchvote.components.voter.domain;
+
+message VoterState {
+  string organization = 1;
+  string username = 2;
+  repeated string area_ids = 3;
+  bool archived = 4;
+}
+
+// EVENTS
+
+message VoterIntroduced {
+  string organization = 1;
+  string username = 2;
+  repeated string area_ids = 3;
+}
+
+message VoterArchived {
+  string organization = 1;
+  string username = 2;
+  repeated string area_ids = 3;
+}

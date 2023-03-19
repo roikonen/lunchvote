@@ -1,0 +1,12 @@
+// This is the default Access Control List (ACL) for all components of this Kalix Service
+syntax = "proto3";
+
+package fi.simoroikonen.lunchvote;
+
+import "kalix/annotations.proto";
+
+// Allow nothing by default.
+// Documentation at https://docs.kalix.io/services/using-acls.html
+option (kalix.file).acl = {
+  allow: {}
+};

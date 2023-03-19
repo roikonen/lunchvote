@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package fi.simoroikonen.lunchvote.components.area.view;
+
+import "components/area/domain/area_domain.proto";
+import "components/area/api/area_api.proto";
+import "kalix/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+
+message GetAreaIdsRequest {
+  string organization = 1;
+}
+
+message Area {
+  string organization = 1;
+  string id = 2;
+}
+
+message GetAreaIdsResponse {
+  repeated string area_ids = 1;
+}
+
+service AreaIds {
+  option (kalix.codegen) = {
+    view: {}
+  };
+
+  rpc ProcessAreaIntroduced(domain.AreaIntroduced) returns (Area) {
+    option (kalix.method).eventing.in = {
+      event_sourced_entity: "area"
+    };
+    option (kalix.method).view.update = {
+      table: "areas"
+      transform_updates: true
+    };
+  }
+
+  rpc IgnoreOtherEvents(google.protobuf.Any) returns (Area) {
+    option (kalix.method).eventing.in = {
+      event_sourced_entity: "area"
+      ignore: true
+    };
+  };
+
+  rpc GetAreaIds(GetAreaIdsRequest) returns (GetAreaIdsResponse) {
+    option (kalix.method).view.query = {
+      query: "SELECT id AS area_ids FROM areas WHERE organization = :organization ORDER BY id"
+    };
+  }
+}

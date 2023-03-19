@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package fi.simoroikonen.lunchvote.components.area.action;
+
+import "google/protobuf/empty.proto";
+import "kalix/annotations.proto";
+import "components/area/api/area_api.proto";
+
+message AreaExistsRequest {
+  string organization = 1;
+  string area_id = 2;
+}
+
+message PlaceExistsRequest {
+  string organization = 1;
+  string area_id = 2;
+  string place_id = 3;
+}
+
+message BoolResponse {
+  bool response = 1;
+}
+
+service AreaActions {
+  option (kalix.codegen) = {
+    action: {}
+  };
+  option (kalix.service).acl.allow = { principal: ALL };
+
+  rpc AreaExists(AreaExistsRequest) returns (BoolResponse) {}
+  rpc PlaceExists(PlaceExistsRequest) returns (BoolResponse) {}
+}
+

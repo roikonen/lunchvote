@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package fi.simoroikonen.lunchvote.view.entity.arealvoter.domain;
+
+message ArealVoterState {
+  string organization = 1;
+  string username = 2;
+  string area_id = 3;
+}

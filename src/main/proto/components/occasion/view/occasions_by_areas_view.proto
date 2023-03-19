@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package fi.simoroikonen.lunchvote.components.occasion.view;
+
+import "components/occasion/domain/occasion_domain.proto";
+import "components/occasion/api/occasion_api.proto";
+import "kalix/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+message Occasion {
+  string id = 1;
+  string organization = 2;
+  string area_id = 3;
+  string start_datetime_iso_8610_utc = 4;
+  string publisher_username = 5;
+  repeated api.Place voted_places = 6;
+  google.protobuf.Timestamp start_datetime = 7;
+}
+
+message OccasionsByAreasResponse {
+  repeated api.Occasion occasions = 1;
+}
+
+message ByAreaIds {
+  string organization = 1;
+  repeated string area_ids = 2;
+  google.protobuf.Timestamp start_after = 3;
+  google.protobuf.Timestamp start_before = 4;
+}
+
+service RecentOccasionsByArea {
+  option (kalix.codegen) = {
+    view: {}
+  };
+
+  rpc ProcessOccasionPublished(domain.OccasionPublished) returns (Occasion) {
+    option (kalix.method).eventing.in = {
+      event_sourced_entity: "occasion"
+    };
+    option (kalix.method).view.update = {
+      table: "occasions"
+      transform_updates: true
+    };
+  }
+
+  rpc ProcessVotePlacedForOccasion(domain.VotePlacedForOccasion) returns (Occasion) {
+    option (kalix.method).eventing.in = {
+      event_sourced_entity: "occasion"
+    };
+    option (kalix.method).view.update = {
+      table: "occasions"
+      transform_updates: true
+    };
+  }
+
+  rpc GetOccasionsByAreas(ByAreaIds) returns (OccasionsByAreasResponse) {
+    option (kalix.method).view.query = {
+      query: "SELECT (id, area_id, start_datetime_iso_8610_utc, publisher_username, voted_places) AS occasions "
+             "FROM occasions "
+             "WHERE area_id = ANY(:area_ids) AND start_datetime > :start_after AND start_datetime < :start_before AND organization = :organization"
+    };
+  }
+}

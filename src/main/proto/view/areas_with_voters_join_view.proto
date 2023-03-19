@@ -1,0 +1,99 @@
+syntax = "proto3";
+
+package fi.simoroikonen.lunchvote.view;
+
+import "components/area/domain/area_domain.proto";
+import "view/entity/arealvoter/domain/areal_voter_domain.proto";
+import "kalix/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+
+// REQUEST
+
+message AreasWithVotersRequest {
+  string organization = 1;
+}
+
+// VIEW MODEL
+
+message AreasWithVotersResults {
+  repeated Area areas = 1;
+}
+
+message Area {
+  string id = 1;
+  repeated components.area.domain.Place places = 2;
+  repeated Voter voters = 3;
+}
+
+message Voter {
+  string username = 1;
+}
+
+// SERVICE
+
+service AreasWithVotersJoinView {
+  option (kalix.codegen) = {
+    view: {}
+  };
+
+  rpc ProcessAreaIntroduced(components.area.domain.AreaIntroduced) returns (components.area.domain.AreaState) {
+    option (kalix.method).eventing.in = {
+      event_sourced_entity: "area"
+    };
+    option (kalix.method).view.update = {
+      table: "areas"
+      transform_updates: true
+    };
+  }
+
+  rpc ProcessPlaceIntroduced(components.area.domain.PlaceIntroduced) returns (components.area.domain.AreaState) {
+    option (kalix.method).eventing.in = {
+      event_sourced_entity: "area"
+    };
+    option (kalix.method).view.update = {
+      table: "areas"
+      transform_updates: true
+    };
+  }
+
+  rpc ProcessPlaceArchived(components.area.domain.PlaceArchived) returns (components.area.domain.AreaState) {
+    option (kalix.method).eventing.in = {
+      event_sourced_entity: "area"
+    };
+    option (kalix.method).view.update = {
+      table: "areas"
+      transform_updates: true
+    };
+  }
+
+  rpc UpdateArealVoter(view.entity.arealvoter.domain.ArealVoterState) returns (view.entity.arealvoter.domain.ArealVoterState) {
+    option (kalix.method).eventing.in = {
+      value_entity: "arealvoter"
+    };
+    option (kalix.method).view.update = {
+      table: "voters"
+    };
+  }
+
+  rpc DeleteArealVoter(google.protobuf.Empty) returns (view.entity.arealvoter.domain.ArealVoterState) {
+    option (kalix.method).eventing.in = {
+      value_entity: "arealvoter"
+      handle_deletes: true
+    };
+    option (kalix.method).view.update = {
+      table: "voters"
+    };
+  }
+
+  rpc GetAreas(AreasWithVotersRequest) returns (AreasWithVotersResults) {
+    option (kalix.method).view.query = {
+      query: "SELECT (areas.id, areas.places AS places, (voters.username) AS voters) AS areas "
+             "FROM areas "
+             "LEFT JOIN voters "
+             "ON areas.id = voters.area_id "
+             "WHERE voters.organization = :organization AND areas.organization = :organization "
+             "ORDER BY areas.id"
+    };
+  }
+}

@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package fi.simoroikonen.lunchvote.controller;
+
+import "google/protobuf/empty.proto";
+import "kalix/annotations.proto";
+import "view/areas_with_voters_join_view.proto";
+import "components/area/view/area_ids_view.proto";
+
+// COMMANDS
+
+message IntroduceAreaCommand {
+  string id = 1;
+}
+
+message IntroduceVoterCommand {
+  string username = 1;
+  repeated string area_ids = 2;
+}
+
+message ArchiveVoterCommand {
+  string username = 1;
+}
+
+// SERVICE
+
+service AdminControllerAction {
+  option (kalix.codegen) = {
+    action: {}
+  };
+  option (kalix.service).acl.allow = { principal: ALL };
+
+  // AREA
+  rpc IntroduceArea(IntroduceAreaCommand) returns (google.protobuf.Empty) {
+    option (kalix.method).jwt = {
+      validate: BEARER_TOKEN
+    };
+  }
+  rpc GetAreaIds(google.protobuf.Empty) returns (components.area.view.GetAreaIdsResponse) {
+    option (kalix.method).jwt = {
+      validate: BEARER_TOKEN
+    };
+  }
+  rpc GetAreasWithPlacesAndVoters(google.protobuf.Empty) returns (lunchvote.view.AreasWithVotersResults) {
+    option (kalix.method).jwt = {
+      validate: BEARER_TOKEN
+    };
+  }
+
+  // VOTER
+  rpc IntroduceVoter(IntroduceVoterCommand) returns (google.protobuf.Empty) {
+    option (kalix.method).jwt = {
+      validate: BEARER_TOKEN
+    };
+  }
+  rpc ArchiveVoter(ArchiveVoterCommand) returns (google.protobuf.Empty) {
+    option (kalix.method).jwt = {
+      validate: BEARER_TOKEN
+    };
+  }
+}
+

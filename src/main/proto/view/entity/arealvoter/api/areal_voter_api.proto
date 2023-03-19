@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "kalix/annotations.proto";
+import "google/api/annotations.proto";
+
+package fi.simoroikonen.lunchvote.view.entity.arealvoter.api;
+
+message IntroduceArealVoterCommand {
+  string organization = 1 [(kalix.field).entity_key = true];
+  string username = 2 [(kalix.field).entity_key = true];
+  string area_id = 3 [(kalix.field).entity_key = true];
+}
+
+message ArchiveArealVoterCommand {
+  string organization = 1 [(kalix.field).entity_key = true];
+  string username = 2 [(kalix.field).entity_key = true];
+  string area_id = 3 [(kalix.field).entity_key = true];
+}
+
+service AralVoterService {
+  option (kalix.codegen) = {
+    value_entity: {
+      name: "fi.simoroikonen.lunchvote.view.entity.arealvoter.domain.ArealVoter"
+      entity_type: "arealvoter"
+      state: "fi.simoroikonen.lunchvote.view.entity.arealvoter.domain.ArealVoterState"
+    }
+  };
+
+  rpc IntroduceArealVoter(IntroduceArealVoterCommand) returns (google.protobuf.Empty) {}
+  rpc ArchiveArealVoter(ArchiveArealVoterCommand) returns (google.protobuf.Empty) {}
+
+}

@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package fi.simoroikonen.lunchvote.components.occasion.domain;
+
+message Vote {
+  string place_id = 1;
+  string voter_username = 2;
+}
+
+message OccasionState {
+  string id = 1;
+  string organization = 2;
+  string area_id = 3;
+  string start_datetime_iso_8610_utc = 4;
+  string publisher_username = 5;
+  repeated Vote votes = 6;
+}
+
+// EVENTS
+
+message OccasionPublished {
+  string id = 1;
+  string organization = 2;
+  string area_id = 3;
+  string start_datetime_iso_8610_utc = 4;
+  string publisher_username = 5;
+}
+
+message VotePlacedForOccasion {
+  string occasion_id = 1;
+  string place_id = 2;
+  string voter_username = 3;
+}

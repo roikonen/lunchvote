@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package fi.simoroikonen.lunchvote;
+
+message EntityId {
+  string id = 1;
+}
