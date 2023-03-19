@@ -16,7 +16,7 @@ Secured by [JWT](https://jwt.io/).
 
 ## Ubiquitous Language
 
-![ubiquitous_language.png](ubiquitous_language.png)
+![ubiquitous_language.png](doc/img/ubiquitous_language.png)
 
 ## Prerequisite
 
@@ -39,9 +39,36 @@ grpcui -plaintext localhost:9000
 
 ## [JWT](https://jwt.io/)
 
+JWT as a [Bearer token](https://www.rfc-editor.org/rfc/rfc6750) is required:
+* User `Authorization` header in request metadata with JWT token as a value with `Bearer ` -prefix.
+
 Required claims:
 * `username` (`admin` has admin rights by default)
 * `organization` (each organization is a tenant)
+
+**Example:**
+
+**gRPC UI:**
+![jwt-bearer-example.png](doc/img/jwt-bearer-example.png)
+
+**[jwt.io](https://jwt.io/)**
+![jwtio-token-generation.png](doc/img/jwtio-token-generation.png)
+
+## The Flow
+
+1. As Admin (Username `admin`)
+   1. Introduce Area -> Like `jyväskylä`
+   2. Introduce Voter(s) -> Like `simo`, `seppo`
+2. As Voter (`simo`)
+   1. Introduce Place(s) -> Like `fitwok`, `basecamp`, `shalimar`, `nom`
+   2. Publish Occasion -> Datetimed lunch occasion
+   3. Vote a Place For the Occasion
+3. As Voter 2 (`seppo`)
+   1. Get Occasions
+   2. Get Place IDs
+   3. Vote a Place For the Occasion
+4. See voting results
+    1. Get Occasions 
 
 ## Known Issues
 
