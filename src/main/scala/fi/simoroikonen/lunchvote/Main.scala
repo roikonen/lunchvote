@@ -45,7 +45,8 @@ object Main {
       new OccasionsByIdView(_),
       new RecentOccasionsByAreaView(_),
       new VoterByUsernameView(_),
-      new VoterControllerActionImpl(_))
+      new VoterControllerActionImpl(_)
+    )
   }
 
   def main(args: Array[String]): Unit = {

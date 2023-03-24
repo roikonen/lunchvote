@@ -19,12 +19,29 @@ class AreasByIdView(context: ViewContext) extends AbstractAreasByIdView {
 
   override def emptyState: AreaState = AreaState.defaultInstance
 
-  override def processAreaIntroduced(currentState: AreaState, event: AreaIntroduced): UpdateEffect[AreaState] =
-    effects.updateState(currentState.copy(organization = event.organization, id = event.id))
+  override def processAreaIntroduced(
+      currentState: AreaState,
+      event: AreaIntroduced
+  ): UpdateEffect[AreaState] =
+    effects.updateState(
+      currentState.copy(organization = event.organization, id = event.id)
+    )
 
-  override def processPlaceIntroduced(currentState: AreaState, event: PlaceIntroduced): UpdateEffect[AreaState] =
-    effects.updateState(currentState.copy(places = currentState.places :+ Place(event.id)))
+  override def processPlaceIntroduced(
+      currentState: AreaState,
+      event: PlaceIntroduced
+  ): UpdateEffect[AreaState] =
+    effects.updateState(
+      currentState.copy(places = currentState.places :+ Place(event.id))
+    )
 
-  override def processPlaceArchived(currentState: AreaState, event: PlaceArchived): UpdateEffect[AreaState] =
-    effects.updateState(currentState.copy(places = currentState.places.filterNot(_.id.equals(event.id))))
+  override def processPlaceArchived(
+      currentState: AreaState,
+      event: PlaceArchived
+  ): UpdateEffect[AreaState] =
+    effects.updateState(
+      currentState.copy(places =
+        currentState.places.filterNot(_.id.equals(event.id))
+      )
+    )
 }

@@ -15,14 +15,22 @@ class ArealVoter(context: ValueEntityContext) extends AbstractArealVoter {
 
   override def introduceArealVoter(
       currentState: ArealVoterState,
-      cmd: api.IntroduceArealVoterCommand): ValueEntity.Effect[Empty] =
+      cmd: api.IntroduceArealVoterCommand
+  ): ValueEntity.Effect[Empty] =
     effects
-      .updateState(currentState.copy(organization = cmd.organization, username = cmd.username, areaId = cmd.areaId))
+      .updateState(
+        currentState.copy(
+          organization = cmd.organization,
+          username = cmd.username,
+          areaId = cmd.areaId
+        )
+      )
       .thenReply(Empty.defaultInstance)
 
   override def archiveArealVoter(
       currentState: ArealVoterState,
-      cmd: api.ArchiveArealVoterCommand): ValueEntity.Effect[Empty] =
+      cmd: api.ArchiveArealVoterCommand
+  ): ValueEntity.Effect[Empty] =
     effects.deleteEntity().thenReply(Empty.defaultInstance)
 
 }

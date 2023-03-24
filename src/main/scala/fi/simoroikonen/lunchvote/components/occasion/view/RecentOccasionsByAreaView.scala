@@ -15,11 +15,15 @@ import java.time.Instant
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
 
-class RecentOccasionsByAreaView(context: ViewContext) extends AbstractRecentOccasionsByAreaView {
+class RecentOccasionsByAreaView(context: ViewContext)
+    extends AbstractRecentOccasionsByAreaView {
 
   override def emptyState: Occasion = Occasion.defaultInstance
 
-  override def processOccasionPublished(currentState: Occasion, event: OccasionPublished): UpdateEffect[Occasion] =
+  override def processOccasionPublished(
+      currentState: Occasion,
+      event: OccasionPublished
+  ): UpdateEffect[Occasion] =
     effects.updateState(
       currentState.copy(
         id = event.id,
@@ -27,17 +31,24 @@ class RecentOccasionsByAreaView(context: ViewContext) extends AbstractRecentOcca
         areaId = event.areaId,
         startDatetimeIso8610Utc = event.startDatetimeIso8610Utc,
         publisherUsername = event.publisherUsername,
-        startDatetime = Option(Timestamp(Instant.parse(event.startDatetimeIso8610Utc)))))
+        startDatetime =
+          Option(Timestamp(Instant.parse(event.startDatetimeIso8610Utc)))
+      )
+    )
 
   override def processVotePlacedForOccasion(
       currentState: Occasion,
-      event: VotePlacedForOccasion): UpdateEffect[Occasion] = {
+      event: VotePlacedForOccasion
+  ): UpdateEffect[Occasion] = {
     val votedPlace = event.placeId
     val currentVotedPlaces = currentState.votedPlaces
-    val currentNumberOfVotes = currentVotedPlaces.find(_.placeId.equals(votedPlace)).map(_.votes).getOrElse(0)
-    val newVotedPlaces = currentVotedPlaces.filterNot(_.placeId.equals(votedPlace)) :+ Place(
-      placeId = votedPlace,
-      votes = currentNumberOfVotes + 1)
+    val currentNumberOfVotes = currentVotedPlaces
+      .find(_.placeId.equals(votedPlace))
+      .map(_.votes)
+      .getOrElse(0)
+    val newVotedPlaces = currentVotedPlaces.filterNot(
+      _.placeId.equals(votedPlace)
+    ) :+ Place(placeId = votedPlace, votes = currentNumberOfVotes + 1)
     effects.updateState(currentState.copy(votedPlaces = newVotedPlaces))
   }
 

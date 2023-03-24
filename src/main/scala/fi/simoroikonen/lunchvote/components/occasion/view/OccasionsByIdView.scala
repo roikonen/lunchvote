@@ -10,19 +10,23 @@ import kalix.scalasdk.view.ViewContext
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
 
-class OccasionsByIdView(context: ViewContext) extends AbstractOccasionsByIdView {
+class OccasionsByIdView(context: ViewContext)
+    extends AbstractOccasionsByIdView {
 
   override def emptyState: OccasionState = OccasionState.defaultInstance
 
   override def processOccasionPublished(
       currentState: OccasionState,
-      occasionPublished: OccasionPublished): UpdateEffect[OccasionState] =
+      occasionPublished: OccasionPublished
+  ): UpdateEffect[OccasionState] =
     effects.updateState(
       currentState.copy(
         id = occasionPublished.id,
         organization = occasionPublished.organization,
         areaId = occasionPublished.areaId,
         startDatetimeIso8610Utc = occasionPublished.startDatetimeIso8610Utc,
-        publisherUsername = occasionPublished.publisherUsername))
+        publisherUsername = occasionPublished.publisherUsername
+      )
+    )
 
 }

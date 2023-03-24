@@ -13,7 +13,12 @@ class AreaIdsView(context: ViewContext) extends AbstractAreaIdsView {
 
   override def emptyState: Area = Area.defaultInstance
 
-  override def processAreaIntroduced(state: Area, event: AreaIntroduced): UpdateEffect[Area] =
-    effects.updateState(state.copy(organization = event.organization, id = event.id))
+  override def processAreaIntroduced(
+      state: Area,
+      event: AreaIntroduced
+  ): UpdateEffect[Area] =
+    effects.updateState(
+      state.copy(organization = event.organization, id = event.id)
+    )
 
 }

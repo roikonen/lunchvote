@@ -15,20 +15,38 @@ import kalix.scalasdk.view.ViewContext
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
 
-class AreasWithVotersJoinViewImpl(context: ViewContext) extends AbstractAreasWithVotersJoinView {
+class AreasWithVotersJoinViewImpl(context: ViewContext)
+    extends AbstractAreasWithVotersJoinView {
 
   object AreasViewTable extends AbstractAreasViewTable {
 
     override def emptyState: AreaState = AreaState.defaultInstance
 
-    override def processAreaIntroduced(state: AreaState, event: AreaIntroduced): UpdateEffect[AreaState] =
-      effects.updateState(state.copy(organization = event.organization, id = event.id))
+    override def processAreaIntroduced(
+        state: AreaState,
+        event: AreaIntroduced
+    ): UpdateEffect[AreaState] =
+      effects.updateState(
+        state.copy(organization = event.organization, id = event.id)
+      )
 
-    override def processPlaceIntroduced(state: AreaState, event: PlaceIntroduced): UpdateEffect[AreaState] =
-      effects.updateState(state.copy(places = state.places :+ Place(event.id, event.introducerUsername)))
+    override def processPlaceIntroduced(
+        state: AreaState,
+        event: PlaceIntroduced
+    ): UpdateEffect[AreaState] =
+      effects.updateState(
+        state.copy(places =
+          state.places :+ Place(event.id, event.introducerUsername)
+        )
+      )
 
-    override def processPlaceArchived(state: AreaState, event: PlaceArchived): UpdateEffect[AreaState] =
-      effects.updateState(state.copy(places = state.places.filterNot(_.id.equals(event.id))))
+    override def processPlaceArchived(
+        state: AreaState,
+        event: PlaceArchived
+    ): UpdateEffect[AreaState] =
+      effects.updateState(
+        state.copy(places = state.places.filterNot(_.id.equals(event.id)))
+      )
 
   }
 
