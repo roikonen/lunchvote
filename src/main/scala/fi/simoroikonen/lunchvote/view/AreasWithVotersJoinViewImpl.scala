@@ -15,8 +15,7 @@ import kalix.scalasdk.view.ViewContext
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
 
-class AreasWithVotersJoinViewImpl(context: ViewContext)
-    extends AbstractAreasWithVotersJoinView {
+class AreasWithVotersJoinViewImpl(context: ViewContext) extends AbstractAreasWithVotersJoinView {
 
   object AreasViewTable extends AbstractAreasViewTable {
 
@@ -35,9 +34,7 @@ class AreasWithVotersJoinViewImpl(context: ViewContext)
         event: PlaceIntroduced
     ): UpdateEffect[AreaState] =
       effects.updateState(
-        state.copy(places =
-          state.places :+ Place(event.id, event.introducerUsername)
-        )
+        state.copy(places = state.places :+ Place(event.id, event.introducerUsername))
       )
 
     override def processPlaceArchived(

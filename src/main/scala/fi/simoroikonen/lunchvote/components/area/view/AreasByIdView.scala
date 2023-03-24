@@ -40,8 +40,6 @@ class AreasByIdView(context: ViewContext) extends AbstractAreasByIdView {
       event: PlaceArchived
   ): UpdateEffect[AreaState] =
     effects.updateState(
-      currentState.copy(places =
-        currentState.places.filterNot(_.id.equals(event.id))
-      )
+      currentState.copy(places = currentState.places.filterNot(_.id.equals(event.id)))
     )
 }

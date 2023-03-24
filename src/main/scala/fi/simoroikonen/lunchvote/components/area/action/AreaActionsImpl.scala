@@ -9,8 +9,7 @@ import fi.simoroikonen.lunchvote.components.area
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
 
-class AreaActionsImpl(creationContext: ActionCreationContext)
-    extends AbstractAreaActionsAction {
+class AreaActionsImpl(creationContext: ActionCreationContext) extends AbstractAreaActionsAction {
 
   override def areaExists(
       request: AreaExistsRequest

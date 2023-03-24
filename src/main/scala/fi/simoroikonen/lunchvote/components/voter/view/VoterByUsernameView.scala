@@ -11,8 +11,7 @@ import kalix.scalasdk.view.ViewContext
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
 
-class VoterByUsernameView(context: ViewContext)
-    extends AbstractVoterByUsernameView {
+class VoterByUsernameView(context: ViewContext) extends AbstractVoterByUsernameView {
 
   override def emptyState: VoterState = VoterState.defaultInstance
 

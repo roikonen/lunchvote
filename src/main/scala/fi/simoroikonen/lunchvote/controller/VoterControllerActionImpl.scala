@@ -3,18 +3,14 @@ package fi.simoroikonen.lunchvote.controller
 import com.google.protobuf.empty.Empty
 import com.google.protobuf.timestamp.Timestamp
 import fi.simoroikonen.lunchvote.components.area.view.ById
-import fi.simoroikonen.lunchvote.{
-  EntityId,
-  JWT_ORGANIZATION_CLAIM_NAME,
-  JWT_USERNAME_CLAIM_NAME
-}
-import fi.simoroikonen.lunchvote.components.{area, occasion, voter}
+import fi.simoroikonen.lunchvote.{ EntityId, JWT_ORGANIZATION_CLAIM_NAME, JWT_USERNAME_CLAIM_NAME }
+import fi.simoroikonen.lunchvote.components.{ area, occasion, voter }
 import fi.simoroikonen.lunchvote.components.voter.domain.VoterState
 import kalix.scalasdk.action.Action
 import kalix.scalasdk.action.ActionCreationContext
-import org.slf4j.{Logger, LoggerFactory}
+import org.slf4j.{ Logger, LoggerFactory }
 
-import java.time.{DateTimeException, Instant}
+import java.time.{ DateTimeException, Instant }
 import scala.concurrent.Future
 
 // This class was initially generated based on the .proto definition by Kalix tooling.
@@ -22,8 +18,7 @@ import scala.concurrent.Future
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
 
-class VoterControllerActionImpl(creationContext: ActionCreationContext)
-    extends AbstractVoterControllerAction {
+class VoterControllerActionImpl(creationContext: ActionCreationContext) extends AbstractVoterControllerAction {
 
   private val log: Logger =
     LoggerFactory.getLogger(classOf[VoterControllerActionImpl])
@@ -132,7 +127,7 @@ class VoterControllerActionImpl(creationContext: ActionCreationContext)
     def process(
         isAuthorized: Boolean,
         voterBelongsToArea: Boolean
-    ): Option[String] = {
+    ): Option[String] =
       Option
         .when(!isAuthorized)("Unauthorized")
         .orElse(
@@ -140,14 +135,13 @@ class VoterControllerActionImpl(creationContext: ActionCreationContext)
             "Voter does not belong to the given area"
           )
         )
-    }
 
     val isAuthorizedF = isAuthorized
     val voterBelongsToAreaF = organizationAndUsernameOption
       .map(r => voterBelongsToArea(r._1, r._2, cmd.areaId))
       .getOrElse(Future.successful(false))
     for {
-      isAuthorized <- isAuthorizedF
+      isAuthorized       <- isAuthorizedF
       voterBelongsToArea <- voterBelongsToAreaF
     } yield process(isAuthorized, voterBelongsToArea)
   }
@@ -156,7 +150,7 @@ class VoterControllerActionImpl(creationContext: ActionCreationContext)
     def process(
         isAuthorized: Boolean,
         voterBelongsToArea: Boolean
-    ): Option[String] = {
+    ): Option[String] =
       Option
         .when(!isAuthorized)("Unauthorized")
         .orElse(
@@ -164,14 +158,13 @@ class VoterControllerActionImpl(creationContext: ActionCreationContext)
             "Voter does not belong to the given area"
           )
         )
-    }
 
     val isAuthorizedF = isAuthorized
     val voterBelongsToAreaF = organizationAndUsernameOption
       .map(r => voterBelongsToArea(r._1, r._2, cmd.areaId))
       .getOrElse(Future.successful(false))
     for {
-      isAuthorized <- isAuthorizedF
+      isAuthorized       <- isAuthorizedF
       voterBelongsToArea <- voterBelongsToAreaF
     } yield process(isAuthorized, voterBelongsToArea)
   }
@@ -180,7 +173,7 @@ class VoterControllerActionImpl(creationContext: ActionCreationContext)
     def process(
         isAuthorized: Boolean,
         voterBelongsToArea: Boolean
-    ): Option[String] = {
+    ): Option[String] =
       Option
         .when(!isAuthorized)("Unauthorized")
         .orElse(
@@ -188,14 +181,13 @@ class VoterControllerActionImpl(creationContext: ActionCreationContext)
             "Voter does not belong to the given area"
           )
         )
-    }
 
     val isAuthorizedF = isAuthorized
     val voterBelongsToAreaF = organizationAndUsernameOption
       .map(r => voterBelongsToArea(r._1, r._2, query.areaId))
       .getOrElse(Future.successful(false))
     for {
-      isAuthorized <- isAuthorizedF
+      isAuthorized       <- isAuthorizedF
       voterBelongsToArea <- voterBelongsToAreaF
     } yield process(isAuthorized, voterBelongsToArea)
   }
@@ -208,7 +200,7 @@ class VoterControllerActionImpl(creationContext: ActionCreationContext)
         isAuthorized: Boolean,
         areaExists: Boolean,
         voterBelongsToArea: Boolean
-    ): Option[String] = {
+    ): Option[String] =
       Option
         .when(!isAuthorized)("Unauthorized")
         .orElse(
@@ -222,7 +214,6 @@ class VoterControllerActionImpl(creationContext: ActionCreationContext)
             "Voter does not belong to the given area"
           )
         )
-    }
 
     val isAuthorizedF = isAuthorized
     val areaExistsF = organizationOption
@@ -232,8 +223,8 @@ class VoterControllerActionImpl(creationContext: ActionCreationContext)
       .map(r => voterBelongsToArea(r._1, r._2, cmd.areaId))
       .getOrElse(Future.successful(false))
     for {
-      isAuthorized <- isAuthorizedF
-      areaExists <- areaExistsF
+      isAuthorized       <- isAuthorizedF
+      areaExists         <- areaExistsF
       voterBelongsToArea <- voterBelongsToAreaF
     } yield process(isAuthorized, areaExists, voterBelongsToArea)
   }
@@ -245,7 +236,7 @@ class VoterControllerActionImpl(creationContext: ActionCreationContext)
         isAuthorized: Boolean,
         placeExistsInArea: Boolean,
         voterBelongsToArea: Boolean
-    ): Option[String] = {
+    ): Option[String] =
       Option
         .when(!isAuthorized)("Unauthorized")
         .orElse(
@@ -258,7 +249,6 @@ class VoterControllerActionImpl(creationContext: ActionCreationContext)
             "Voter does not belong to the area of the occasion"
           )
         )
-    }
 
     val isAuthorizedF = isAuthorized
     val occasionAreaIdF = organizationOption
@@ -269,7 +259,7 @@ class VoterControllerActionImpl(creationContext: ActionCreationContext)
       .getOrElse(Future.successful(""))
     val occasionPlaceId = cmd.placeId
     for {
-      isAuthorized <- isAuthorizedF
+      isAuthorized   <- isAuthorizedF
       occasionAreaId <- occasionAreaIdF
       placeExistsInArea <- organizationOption
         .map(placeExistsInArea(_, occasionAreaId, occasionPlaceId))
@@ -282,7 +272,7 @@ class VoterControllerActionImpl(creationContext: ActionCreationContext)
 
   private def onError(queryEnvelope: OccasionsQuery): Future[Option[String]] = {
 
-    def process(isAuthorized: Boolean): Option[String] = {
+    def process(isAuthorized: Boolean): Option[String] =
       Option
         .when(!isAuthorized)("Unauthorized")
         .orElse(
@@ -299,7 +289,6 @@ class VoterControllerActionImpl(creationContext: ActionCreationContext)
             "startBeforeIso8610Utc mut be in ISO 8601 UTC format e.g. '2023-01-01T13:00:00Z'"
           )
         )
-    }
 
     for {
       isAuthorized <- isAuthorized
@@ -404,15 +393,13 @@ class VoterControllerActionImpl(creationContext: ActionCreationContext)
 
     effects.asyncEffect(for {
       errorOption <- errorOptionF
-      areaIds <- areaIdsF
+      areaIds     <- areaIdsF
     } yield {
       lazy val query: occasion.view.ByAreaIds = occasion.view.ByAreaIds(
         organization = organizationOption.get,
         areaIds = areaIds,
-        startAfter =
-          Option(Timestamp(Instant.parse(queryEnvelope.startAfterIso8610Utc))),
-        startBefore =
-          Option(Timestamp(Instant.parse(queryEnvelope.startBeforeIso8610Utc)))
+        startAfter = Option(Timestamp(Instant.parse(queryEnvelope.startAfterIso8610Utc))),
+        startBefore = Option(Timestamp(Instant.parse(queryEnvelope.startBeforeIso8610Utc)))
       )
       errorOption
         .map(effects.error(_))

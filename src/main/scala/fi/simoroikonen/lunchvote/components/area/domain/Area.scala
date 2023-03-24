@@ -125,8 +125,6 @@ class Area(context: EventSourcedEntityContext) extends AbstractArea {
       currentState: AreaState,
       event: PlaceArchived
   ): AreaState =
-    currentState.copy(places =
-      currentState.places.filterNot(_.id.equals(event.id))
-    )
+    currentState.copy(places = currentState.places.filterNot(_.id.equals(event.id)))
 
 }

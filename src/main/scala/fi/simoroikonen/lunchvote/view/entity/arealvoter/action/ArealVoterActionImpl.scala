@@ -3,10 +3,7 @@ package fi.simoroikonen.lunchvote.view.entity.arealvoter.action
 import com.google.protobuf.empty.Empty
 import fi.simoroikonen.lunchvote.components.voter.domain.VoterArchived
 import fi.simoroikonen.lunchvote.components.voter.domain.VoterIntroduced
-import fi.simoroikonen.lunchvote.view.entity.arealvoter.api.{
-  ArchiveArealVoterCommand,
-  IntroduceArealVoterCommand
-}
+import fi.simoroikonen.lunchvote.view.entity.arealvoter.api.{ ArchiveArealVoterCommand, IntroduceArealVoterCommand }
 import kalix.scalasdk.action.Action
 import kalix.scalasdk.action.ActionCreationContext
 
@@ -17,8 +14,7 @@ import scala.concurrent.Future
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
 
-class ArealVoterActionImpl(creationContext: ActionCreationContext)
-    extends AbstractArealVoterAction {
+class ArealVoterActionImpl(creationContext: ActionCreationContext) extends AbstractArealVoterAction {
 
   override def processVoterIntroduced(
       evt: VoterIntroduced
@@ -32,9 +28,7 @@ class ArealVoterActionImpl(creationContext: ActionCreationContext)
     )
     val resultF = Future
       .sequence(
-        cmds.map(cmd =>
-          components.arealVoter.introduceArealVoter(cmd).execute()
-        )
+        cmds.map(cmd => components.arealVoter.introduceArealVoter(cmd).execute())
       )
       .map(_ => Empty.defaultInstance)
     effects.asyncReply(resultF)

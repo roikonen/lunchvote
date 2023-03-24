@@ -1,22 +1,13 @@
 package fi.simoroikonen.lunchvote.controller
 
 import com.google.protobuf.empty.Empty
-import fi.simoroikonen.lunchvote.components.area.view.{
-  GetAreaIdsRequest,
-  GetAreaIdsResponse
-}
-import fi.simoroikonen.lunchvote.{
-  JWT_ORGANIZATION_CLAIM_NAME,
-  JWT_USERNAME_CLAIM_NAME
-}
-import fi.simoroikonen.lunchvote.components.{area, voter}
-import fi.simoroikonen.lunchvote.view.{
-  AreasWithVotersRequest,
-  AreasWithVotersResults
-}
+import fi.simoroikonen.lunchvote.components.area.view.{ GetAreaIdsRequest, GetAreaIdsResponse }
+import fi.simoroikonen.lunchvote.{ JWT_ORGANIZATION_CLAIM_NAME, JWT_USERNAME_CLAIM_NAME }
+import fi.simoroikonen.lunchvote.components.{ area, voter }
+import fi.simoroikonen.lunchvote.view.{ AreasWithVotersRequest, AreasWithVotersResults }
 import kalix.scalasdk.action.Action
 import kalix.scalasdk.action.ActionCreationContext
-import org.slf4j.{Logger, LoggerFactory}
+import org.slf4j.{ Logger, LoggerFactory }
 
 import scala.concurrent.Future
 
@@ -25,8 +16,7 @@ import scala.concurrent.Future
 // As long as this file exists it will not be overwritten: you can maintain it yourself,
 // or delete it so it is regenerated as needed.
 
-class AdminControllerActionImpl(creationContext: ActionCreationContext)
-    extends AbstractAdminControllerAction {
+class AdminControllerActionImpl(creationContext: ActionCreationContext) extends AbstractAdminControllerAction {
 
   private val log: Logger =
     LoggerFactory.getLogger(classOf[AdminControllerActionImpl])
@@ -75,7 +65,7 @@ class AdminControllerActionImpl(creationContext: ActionCreationContext)
 
   private def onError(cmd: IntroduceVoterCommand): Future[Option[String]] = {
 
-    def process(areasExists: Boolean): Option[String] = {
+    def process(areasExists: Boolean): Option[String] =
       Option
         .when(!isAuthorized)("Unauthorized")
         .orElse(
@@ -84,7 +74,6 @@ class AdminControllerActionImpl(creationContext: ActionCreationContext)
           )
         )
         .orElse(Option.when(!areasExists)("All given areas don't exist"))
-    }
 
     for {
       areasExists <- Future

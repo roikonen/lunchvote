@@ -1,16 +1,12 @@
 package fi.simoroikonen.lunchvote.components.occasion.domain
 
 import com.google.protobuf.empty.Empty
-import fi.simoroikonen.lunchvote.{
-  EntityId,
-  JWT_ORGANIZATION_CLAIM_NAME,
-  JWT_USERNAME_CLAIM_NAME
-}
+import fi.simoroikonen.lunchvote.{ EntityId, JWT_ORGANIZATION_CLAIM_NAME, JWT_USERNAME_CLAIM_NAME }
 import fi.simoroikonen.lunchvote.components.occasion.api
 import kalix.scalasdk.eventsourcedentity.EventSourcedEntity
 import kalix.scalasdk.eventsourcedentity.EventSourcedEntityContext
 
-import java.time.{DateTimeException, Instant}
+import java.time.{ DateTimeException, Instant }
 
 // This class was initially generated based on the .proto definition by Kalix tooling.
 //
