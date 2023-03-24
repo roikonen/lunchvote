@@ -15,9 +15,7 @@ class Voter(context: EventSourcedEntityContext) extends AbstractVoter {
   override def emptyState: VoterState = VoterState.defaultInstance
 
   private def organization: String =
-    commandContext().metadata
-      .get(s"_kalix-jwt-claim-$JWT_ORGANIZATION_CLAIM_NAME")
-      .getOrElse("UNDEFINED")
+    commandContext().metadata.jwtClaims.getString(JWT_ORGANIZATION_CLAIM_NAME).getOrElse("UNDEFINED")
 
   // VALIDATION
 

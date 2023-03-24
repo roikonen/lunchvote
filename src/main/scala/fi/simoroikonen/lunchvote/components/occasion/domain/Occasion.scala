@@ -17,14 +17,10 @@ class Occasion(context: EventSourcedEntityContext) extends AbstractOccasion {
   override def emptyState: OccasionState = OccasionState.defaultInstance
 
   private def username: String =
-    commandContext().metadata
-      .get(s"_kalix-jwt-claim-$JWT_USERNAME_CLAIM_NAME")
-      .getOrElse("UNDEFINED")
+    commandContext().metadata.jwtClaims.getString(JWT_USERNAME_CLAIM_NAME).getOrElse("UNDEFINED")
 
   private def organization: String =
-    commandContext().metadata
-      .get(s"_kalix-jwt-claim-$JWT_ORGANIZATION_CLAIM_NAME")
-      .getOrElse("UNDEFINED")
+    commandContext().metadata.jwtClaims.getString(JWT_ORGANIZATION_CLAIM_NAME)      .getOrElse("UNDEFINED")
 
   private def isValidDateTimeString(dateTimeString: String): Boolean =
     try {
