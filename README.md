@@ -106,9 +106,9 @@ Process was iterative despite it has been described as a flow.
 
 ### 7. Views (read models)
 
-* [/src/main/proto/view](/src/main/proto/components/area/view)
-* [/src/main/proto/view](/src/main/proto/components/occasion/view)
-* [/src/main/proto/view](/src/main/proto/components/voter/view)
+* [/src/main/proto/components/area/view](/src/main/proto/components/area/view)
+* [/src/main/proto/components/occasion/view](/src/main/proto/components/occasion/view)
+* [/src/main/proto/components/voter/view](/src/main/proto/components/voter/view)
 * [/src/main/proto/view](/src/main/proto/view)
 
 ### 8. gRPC API by user (voter & admin)
