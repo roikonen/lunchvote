@@ -100,18 +100,22 @@ Process was iterative despite it has been described as a flow.
 
 ![aggregates_read_models.png](doc/img/aggregates_read_models.png)
 
-### 6. Data model & business logic
+### 6. Data model
 
 * [/src/main/proto/components](/src/main/proto/components)
 
-### 7. Views (read models)
+### 7. Business logic
+
+* [/src/main/scala/fi/simoroikonen/lunchvote/components](/src/main/scala/fi/simoroikonen/lunchvote/components)
+
+### 8. Views (read models)
 
 * [/src/main/proto/components/area/view](/src/main/proto/components/area/view)
 * [/src/main/proto/components/occasion/view](/src/main/proto/components/occasion/view)
 * [/src/main/proto/components/voter/view](/src/main/proto/components/voter/view)
 * [/src/main/proto/view](/src/main/proto/view)
 
-### 8. gRPC API by user (voter & admin)
+### 9. gRPC API by user (voter & admin)
 
 * [/src/main/proto/controller](/src/main/proto/controller)
 
