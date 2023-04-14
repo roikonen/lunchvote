@@ -73,3 +73,46 @@ Required claims:
 ## Known Issues
 
 1. AreasWithVotersJoinView `LEFT JOIN` does not seem to work properly -> Can't see area before it has it's first voter
+
+## Creation Process
+
+EventStorming and DDD influenced this process.
+
+Process was iterative despite it has been described as a flow.
+
+### 1. Identify the problems
+
+![problems.png](doc/img/problems.png)
+
+### 2. Define the most important domain event in the system
+
+![core_event.png](doc/img/core_event.png)
+
+### 3. Create mental model for the terminology
+
+![ubiquitous-language.png](doc/img/ubiquitous-language.png)
+
+### 4. Define the rest of the domain events
+
+![domain_events.png](doc/img/domain_events.png)
+
+### 5. Create aggregates and read models
+
+![aggregates_read_models.png](doc/img/aggregates_read_models.png)
+
+### 6. Data model & business logic
+
+* [/src/main/proto/components](/src/main/proto/components)
+
+### 7. Views (read models)
+
+* [/src/main/proto/view](/src/main/proto/components/area/view)
+* [/src/main/proto/view](/src/main/proto/components/occasion/view)
+* [/src/main/proto/view](/src/main/proto/components/voter/view)
+* [/src/main/proto/view](/src/main/proto/view)
+
+### 8. gRPC API by user (voter & admin)
+
+* [/src/main/proto/controller](/src/main/proto/controller)
+
+
